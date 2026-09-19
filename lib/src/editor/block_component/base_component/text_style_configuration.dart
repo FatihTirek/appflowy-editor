@@ -25,7 +25,7 @@ class TextStyleConfiguration {
     ),
     this.applyHeightToFirstAscent = false,
     this.applyHeightToLastDescent = false,
-    this.lineHeight = 1.5,
+    this.lineHeight,
     this.leadingDistribution = TextLeadingDistribution.even,
   });
 
@@ -57,7 +57,7 @@ class TextStyleConfiguration {
   final bool applyHeightToFirstAscent;
   final bool applyHeightToLastDescent;
 
-  final double lineHeight;
+  final double? lineHeight;
   final TextLeadingDistribution leadingDistribution;
 
   TextStyleConfiguration copyWith({
