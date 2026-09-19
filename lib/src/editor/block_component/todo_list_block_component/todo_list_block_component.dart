@@ -152,13 +152,18 @@ class _TodoListBlockComponentWidgetState
 
     // Measure the natural first-line height of the configured text style so
     // the icon can be precisely centered on that line regardless of font.
+    // textScaler is read from MediaQuery to respect the system "large text"
+    // accessibility setting — the same scaler that RichText inherits from
+    // the ambient MediaQuery when no explicit textScaler is provided.
     // TextPainter.layout() on a single glyph is a micro-second operation and
     // does NOT hook into the widget render tree.
     final textStyle = editorState.editorStyle.textStyleConfiguration.text;
+    final textScaler = MediaQuery.textScalerOf(context);
     final painter = TextPainter(
       text: TextSpan(text: 'A', style: textStyle),
       textDirection: textDirection ?? TextDirection.ltr,
       maxLines: 1,
+      textScaler: textScaler,
     )..layout();
     final firstLineHeight = painter.height;
     painter.dispose();
