@@ -150,6 +150,23 @@ class _TodoListBlockComponentWidgetState
       layoutDirection: Directionality.maybeOf(context),
     );
 
+    // Measure the natural first-line height of the configured text style so
+    // the icon can be precisely centered on that line regardless of font.
+    // TextPainter.layout() on a single glyph is a micro-second operation and
+    // does NOT hook into the widget render tree.
+    final textStyle = editorState.editorStyle.textStyleConfiguration.text;
+    final painter = TextPainter(
+      text: TextSpan(text: 'A', style: textStyle),
+      textDirection: textDirection ?? TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    final firstLineHeight = painter.height;
+    painter.dispose();
+
+    final iconWidget = widget.iconBuilder != null
+        ? widget.iconBuilder!(context, node, checkOrUncheck)
+        : _TodoListIcon(checked: checked, onTap: checkOrUncheck);
+
     Widget child = Container(
       width: double.infinity,
       alignment: alignment,
@@ -158,16 +175,10 @@ class _TodoListBlockComponentWidgetState
         mainAxisSize: MainAxisSize.min,
         textDirection: textDirection,
         children: [
-          widget.iconBuilder != null
-              ? widget.iconBuilder!(
-                  context,
-                  node,
-                  checkOrUncheck,
-                )
-              : _TodoListIcon(
-                  checked: checked,
-                  onTap: checkOrUncheck,
-                ),
+          SizedBox(
+            height: firstLineHeight,
+            child: Center(child: iconWidget),
+          ),
           Flexible(
             child: AppFlowyRichText(
               key: forwardKey,
