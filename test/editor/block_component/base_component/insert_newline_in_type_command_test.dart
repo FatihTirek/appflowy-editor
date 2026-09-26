@@ -78,5 +78,21 @@ void main() {
 
       expect(node2?.type, ParagraphBlockKeys.type);
     });
+
+    test('bulleted list with whitespace converts to paragraph', () async {
+      final bulletedNode = bulletedListNode(
+        text: ' ',
+      );
+      final document = Document.blank()..insert([0], [bulletedNode]);
+
+      final editorState = EditorState(document: document);
+
+      editorState.selection = Selection.collapsed(Position(path: [0], offset: 1));
+
+      unawaited(insertNewLineAfterBulletedList.execute(editorState));
+      final Node? node = editorState.getNodeAtPath([0]);
+
+      expect(node?.type, ParagraphBlockKeys.type);
+    });
   });
 }

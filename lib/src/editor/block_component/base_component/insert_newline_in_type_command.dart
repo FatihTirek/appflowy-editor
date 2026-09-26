@@ -24,14 +24,33 @@ Future<bool> insertNewLineInType(
     return false;
   }
 
-  if (selection.startIndex == 0 && delta.isEmpty) {
+  final plainText = delta.toPlainText();
+  final isEffectivelyEmpty = delta.isEmpty || plainText.trim().isEmpty;
+
+  if (isEffectivelyEmpty) {
     // clear the style
     if (node != null && node.path.length > 1) {
       return KeyEventResult.ignored != outdentCommand.execute(editorState);
     }
 
-    return KeyEventResult.ignored !=
-        convertToParagraphCommand.execute(editorState);
+    final textDirection = node?.attributes[blockComponentTextDirection];
+    final transaction = editorState.transaction;
+    final pNode = paragraphNode(
+      attributes: {
+        ParagraphBlockKeys.delta: Delta().toJson(),
+      },
+      textDirection: textDirection,
+      children: node?.children.map((e) => e.deepCopy()).toList() ?? [],
+    );
+    transaction
+      ..insertNode(node!.path, pNode)
+      ..deleteNode(node)
+      ..afterSelection = Selection.collapsed(
+        Position(path: node.path, offset: 0),
+      );
+    await editorState.apply(transaction);
+
+    return true;
   }
 
   await editorState.insertNewLine(
