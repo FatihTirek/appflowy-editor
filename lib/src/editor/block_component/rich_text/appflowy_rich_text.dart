@@ -568,13 +568,16 @@ class _AppFlowyRichTextState extends State<AppFlowyRichText>
 
         return true;
       });
-      if (height == 0.0 || fontSize == 0.0) {
-        return textSpan;
-      }
+      final effectiveFontSize = fontSize > 0.0
+          ? fontSize
+          : (textStyleConfiguration.text.fontSize ?? 16.0);
+      final effectiveHeight =
+          height > 0.0 ? height : textStyleConfiguration.lineHeight;
+
       textSpan = textSpan.copyWith(
         style: textStyleConfiguration.text.copyWith(
-          height: height,
-          fontSize: fontSize,
+          height: effectiveHeight,
+          fontSize: effectiveFontSize,
         ),
       );
     }
