@@ -142,6 +142,10 @@ class _BulletedListBlockComponentWidgetState
               delegate: this,
               node: widget.node,
               editorState: editorState,
+              strutStyle: StrutStyle.fromTextStyle(
+                textStyleWithTextSpan(),
+                forceStrutHeight: true,
+              ),
               textAlign: alignment?.toTextAlign ?? textAlign,
               placeholderText: placeholderText,
               textSpanDecorator: (textSpan) => textSpan.updateTextStyle(

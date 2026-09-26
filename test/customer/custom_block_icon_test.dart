@@ -22,6 +22,18 @@ void main() async {
       iconMap.forEach((key, value) {
         expect(find.byIcon(value), findsOneWidget);
       });
+
+      final richTexts = tester
+          .widgetList<AppFlowyRichText>(find.byType(AppFlowyRichText))
+          .toList();
+      expect(richTexts, hasLength(4));
+      for (final richText in richTexts.take(3)) {
+        expect(richText.lineHeight, isNull);
+        expect(richText.strutStyle, isNotNull);
+        expect(richText.strutStyle!.height, isNull);
+        expect(richText.strutStyle!.forceStrutHeight, isTrue);
+      }
+      expect(richTexts.last.strutStyle, isNull);
     });
   });
 }

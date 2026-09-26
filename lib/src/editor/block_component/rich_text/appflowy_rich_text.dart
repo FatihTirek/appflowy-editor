@@ -40,6 +40,7 @@ class AppFlowyRichText extends StatefulWidget {
     this.cursorHeight,
     this.cursorWidth = 2.0,
     this.lineHeight,
+    this.strutStyle,
     this.textSpanDecorator,
     this.placeholderText = ' ',
     this.placeholderTextSpanDecorator,
@@ -72,6 +73,9 @@ class AppFlowyRichText extends StatefulWidget {
 
   /// The height of each line.
   final double? lineHeight;
+
+  /// The strut used to keep text, placeholder, and caret metrics consistent.
+  final StrutStyle? strutStyle;
 
   /// customize the text span for rich text
   final AppFlowyTextSpanDecorator? textSpanDecorator;
@@ -425,6 +429,7 @@ class _AppFlowyRichTextState extends State<AppFlowyRichText>
         leadingDistribution: textStyleConfiguration.leadingDistribution,
       ),
       text: textSpan,
+      strutStyle: widget.strutStyle,
       textDirection: textDirection(),
       textScaler: TextScaler.linear(
         widget.editorState.editorStyle.textScaleFactor,
@@ -464,6 +469,7 @@ class _AppFlowyRichTextState extends State<AppFlowyRichText>
         leadingDistribution: textStyleConfiguration.leadingDistribution,
       ),
       text: textSpan,
+      strutStyle: widget.strutStyle,
       textDirection: textDirection(),
       textScaler:
           TextScaler.linear(widget.editorState.editorStyle.textScaleFactor),
@@ -539,6 +545,7 @@ class _AppFlowyRichTextState extends State<AppFlowyRichText>
             leadingDistribution: textStyleConfiguration.leadingDistribution,
           ),
           text: textSpan,
+          strutStyle: widget.strutStyle,
           textDirection: textDirection(),
           textScaler:
               TextScaler.linear(widget.editorState.editorStyle.textScaleFactor),
